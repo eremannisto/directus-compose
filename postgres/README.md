@@ -1,5 +1,5 @@
 # Directus PostgresSQL Compose Template
-This is a docker-compose template for Directus with PostgresSQL as database. It also includes Traefik as reverse proxy.
+This is a docker-compose template for Directus with PostgreSQL as database. It also includes Traefik as reverse proxy.
 
 ## Environment Variables
 ```env

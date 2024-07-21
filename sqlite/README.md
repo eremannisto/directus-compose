@@ -1,5 +1,5 @@
 # Directus SQLITE Compose Template
-This is a docker-compose template for Directus with SQLITE as database. It also includes Traefik as reverse proxy.
+This is a docker-compose template for Directus with SQLite as database. It also includes Traefik as reverse proxy.
 
 ## Environment Variables
 ```env
