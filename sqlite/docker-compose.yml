@@ -37,8 +37,9 @@ services:
         networks:
             - dokploy-network
         ports:
-            - "8055"
+            - ${DIRECTUS_PORT}
         environment:
+            PORT:               "${DIRECTUS_PORT}"
             SECRET:             "${DIRECTUS_KEY}"
             ADMIN_EMAIL:        "${ADMIN_EMAIL}"
             ADMIN_PASSWORD:     "${ADMIN_PASSWORD}"
