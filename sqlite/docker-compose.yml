@@ -4,8 +4,11 @@ services:
     # permissions on the Directus directories during the build.
     init-permissions:
         image: busybox
-        command: ["sh", "-c", "chown -R 1000:1000 /directus/uploads /directus/extensions /directus/database /directus/templates && \
-                               chmod -R 755 /directus/uploads /directus/extensions /directus/database /directus/templates"]
+        command:    ["sh", "-c", "\
+                    chown -R 1000:1000 /directus/uploads /directus/extensions /directus/database /directus/templates && \
+                    echo 'Ownership change successful' || echo 'Ownership change failed'; \
+                    chmod -R 755 /directus/uploads /directus/extensions /directus/database /directus/templates && \
+                    echo 'Permission change successful' || echo 'Permission change failed'"]
         volumes:
             - database:/directus/database
             - uploads:/directus/uploads
