@@ -49,7 +49,7 @@ services:
         networks:
             - dokploy-network
         ports:
-            - "8055:8055"
+            - "${TRAFFIC_PORT}:8055"
         environment:
             SECRET:             "${DIRECTUS_KEY}"
             ADMIN_EMAIL:        "${ADMIN_EMAIL}"
