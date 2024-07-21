@@ -12,4 +12,4 @@ Docker run command for `SQLite`:
 (docker compose -p <container-id> -f ./sqlite/docker-compose.yml up -d --build --remove-orphans)
 ```
 
-Check environment variables in the `/posgres` or `/sqlite` folder to see the default values.
+Check environment variables in the `/postgres` or `/sqlite` folder to see the default values.
