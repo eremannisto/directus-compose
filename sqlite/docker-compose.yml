@@ -28,7 +28,8 @@ services:
     # cache when updated.
     clear-cache:
         image: redis:6
-        command: ["redis-cli", "-h", "cache", "FLUSHALL"]
+        command:    ["sh", "-c", "redis-cli -h cache FLUSHALL && \
+                    echo 'Cache clear successful' || echo 'Cache clear failed'"]
         networks:
             - dokploy-network
         depends_on:
