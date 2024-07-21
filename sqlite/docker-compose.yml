@@ -4,7 +4,7 @@ services:
     # permissions on the Directus directories during the build.
     init-permissions:
         image: busybox
-        command: ["sh", "-c", "/scripts/set-permissions.sh"]
+        command: ["sh", "-c", "./scripts/set-permissions.sh"]
         volumes:
             - database:/directus/database
             - uploads:/directus/uploads
