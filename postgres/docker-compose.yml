@@ -50,6 +50,7 @@ services:
         ports:
             - "${DIRECTUS_PORT}"
         environment:
+            PORT:               "${DIRECTUS_PORT}"
             SECRET:             "${DIRECTUS_KEY}"
             ADMIN_EMAIL:        "${ADMIN_EMAIL}"
             ADMIN_PASSWORD:     "${ADMIN_PASSWORD}"
@@ -90,8 +91,7 @@ networks:
 # Volumes: This section is used to define the volumes that the
 # services will use to store their data persistently.
 volumes:
-    database:
     uploads:
     extensions:
     templates:
-    data:
+    postgres-data:
