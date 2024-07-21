@@ -1,0 +1,101 @@
+services:
+
+    # Init permission: This service is used to set the correct
+    # permissions on the Directus directories during the build.
+    init-permissions:
+        image: busybox
+        command: ["sh", "-c", "/scripts/set-permissions.sh"]
+        volumes:
+            - database:/directus/database
+            - uploads:/directus/uploads
+            - extensions:/directus/extensions
+            - templates:/directus/templates
+        networks:
+            - dokploy-network
+
+    # Database: This service is used to store the Directus data 
+    # in a PostgreSQL database.
+    database:
+        image: postgres:16
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        networks:
+            - dokploy-network
+        environment:
+            POSTGRES_DB:        "${POSTGRES_NAME}"
+            POSTGRES_USER:      "${POSTGRES_USER}"
+            POSTGRES_PASSWORD:  "${POSTGRES_PASSWORD}"
+
+    # Cache: This service is used to store the Directus cache.
+    # It is used to speed up the Directus application.
+    cache:
+        image: redis:6
+        networks:
+            - dokploy-network
+
+    # Clear cache: This service clears the Directus application’s 
+    # cache when updated.
+    clear-cache:
+        image: redis:6
+        command: ["redis-cli", "FLUSHALL"]
+        networks:
+            - dokploy-network
+        depends_on:
+            - cache
+
+    # Directus: This service is used to run the Directus application.
+    directus:
+        image: directus/directus:${DIRECTUS_VERSION}
+        networks:
+            - dokploy-network
+        ports:
+            - "8055:8055"
+        environment:
+            SECRET:             "${DIRECTUS_KEY}"
+            ADMIN_EMAIL:        "${ADMIN_EMAIL}"
+            ADMIN_PASSWORD:     "${ADMIN_PASSWORD}"
+            DB_CLIENT:          "pg"
+            DB_HOST:            "postgres"
+            DB_PORT:            "5432"
+            DB_DATABASE:        "${POSTGRES_NAME}"
+            DB_USER:            "${POSTGRES_USER}"
+            DB_PASSWORD:        "${POSTGRES_PASSWORD}"
+            CACHE_ENABLED:      "true"
+            CACHE_AUTO_PURGE:   "true"
+            CACHE_STORE:        "redis"
+            REDIS:              "redis://cache:6379"
+            WEBSOCKETS_ENABLED: "true"
+            PUBLIC_URL:         "https://${TRAFFIC_DOMAIN}"
+        volumes:
+            - database:/directus/database
+            - uploads:/directus/uploads
+            - extensions:/directus/extensions
+            - templates:/directus/templates
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.directus-${TRAFFIC_HASH}.rule=Host(`${TRAFFIC_DOMAIN}`)"
+            - "traefik.http.routers.directus-${TRAFFIC_HASH}.entrypoints=websecure"
+            - "traefik.http.routers.directus-${TRAFFIC_HASH}.tls.certresolver=letsencrypt"
+            - "traefik.http.services.directus-${TRAFFIC_HASH}.loadbalancer.server.port=${TRAFFIC_PORT}"
+            - "traefik.http.routers.directus-${TRAFFIC_HASH}-http.middlewares=redirect-to-https"
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+        depends_on:
+            - init-permissions
+            - cache
+            - database
+            - clear-cache
+
+# Networks: This section is used to define the network that the
+# services will use to communicate with each other.
+networks:
+    dokploy-network:
+        external: true
+
+# Volumes: This section is used to define the volumes that the
+# services will use to store their data persistently.
+volumes:
+    database:
+    uploads:
+    extensions:
+    templates:
+    data:
