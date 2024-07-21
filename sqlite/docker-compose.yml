@@ -49,7 +49,7 @@ services:
             CACHE_STORE:        "redis"
             REDIS:              "redis://cache:6379"
             WEBSOCKETS_ENABLED: "true"
-            PUBLIC_URL:         "https://${TRAFFIC_DOMAIN}"
+            PUBLIC_URL:         "https://${DIRECTUS_DOMAIN}"
         volumes:
             - database:/directus/database
             - uploads:/directus/uploads
@@ -57,11 +57,9 @@ services:
             - templates:/directus/templates
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.directus-${TRAFFIC_HASH}.rule=Host(`${TRAFFIC_DOMAIN}`)"
-            - "traefik.http.routers.directus-${TRAFFIC_HASH}.entrypoints=websecure"
-            - "traefik.http.routers.directus-${TRAFFIC_HASH}.tls.certresolver=letsencrypt"
-            - "traefik.http.services.directus-${TRAFFIC_HASH}.loadbalancer.server.port=${TRAFFIC_PORT}"
-            - "traefik.http.routers.directus-${TRAFFIC_HASH}-http.middlewares=redirect-to-https"
+            - "traefik.http.routers.${DIRECTUS_HASH}.rule=Host(`${DIRECTUS_DOMAIN}`)"
+            - "traefik.http.services.${DIRECTUS_HASH}.loadbalancer.server.port=${DIRECTUS_PORT}"
+            - "traefik.http.routers.${DIRECTUS_HASH}-http.middlewares=redirect-to-https"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
         depends_on:
             - init-permissions
