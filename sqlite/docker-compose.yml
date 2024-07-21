@@ -4,9 +4,9 @@ services:
     # permissions on the Directus directories during the build.
     init-permissions:
         image: busybox
-        command: ["sh", "-c", "/scripts/set-permissions.sh"]
+        command: ["sh", "-c", "chown -R 1000:1000 /directus/uploads /directus/extensions /directus/database /directus/templates && \
+                               chmod -R 755 /directus/uploads /directus/extensions /directus/database /directus/templates"]
         volumes:
-            - ./scripts:/scripts  # Mount the scripts directory into the container
             - database:/directus/database
             - uploads:/directus/uploads
             - extensions:/directus/extensions
