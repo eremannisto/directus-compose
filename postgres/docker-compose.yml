@@ -4,7 +4,11 @@ services:
     # permissions on the Directus directories during the build.
     init-permissions:
         image: busybox
-        command: ["sh", "-c", "scripts/set-permissions.sh"]
+        command:    ["sh", "-c", "\
+                    chown -R 1000:1000 /directus/uploads /directus/extensions /directus/database /directus/templates && \
+                    echo 'Ownership change successful' || echo 'Ownership change failed'; \
+                    chmod -R 755 /directus/uploads /directus/extensions /directus/database /directus/templates && \
+                    echo 'Permission change successful' || echo 'Permission change failed'"]
         volumes:
             - uploads:/directus/uploads
             - extensions:/directus/extensions
@@ -36,7 +40,8 @@ services:
     # cache when updated.
     clear-cache:
         image: redis:6
-        command: ["redis-cli", "FLUSHALL"]
+        command:    ["sh", "-c", "redis-cli -h cache FLUSHALL && \
+                    echo 'Cache clear successful' || echo 'Cache clear failed'"]
         networks:
             - dokploy-network
         depends_on:
@@ -74,6 +79,8 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.${DIRECTUS_HASH}.rule=Host(`${DIRECTUS_DOMAIN}`)"
             - "traefik.http.services.${DIRECTUS_HASH}.loadbalancer.server.port=${DIRECTUS_PORT}"
+            - "traefik.http.routers.${DIRECTUS_HASH}.entrypoints=websecure"
+            - "traefik.http.routers.${DIRECTUS_HASH}.tls.certResolver=letsencrypt"
             - "traefik.http.routers.${DIRECTUS_HASH}-http.middlewares=redirect-to-https"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
         depends_on:
