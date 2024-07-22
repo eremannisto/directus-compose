@@ -1,5 +1,5 @@
 # Directus Compose Template
-This is a template for creating a new Directus project using Docker Compose. You can choose between a PostgreSQL or SQLite database. It also uses a Redis cache for improved performance, which is emptied during each deployment. It also makes a presistent volume for the database to keep the data between deployments.
+This is a template for creating a new Directus project using Docker Compose. You can choose between a PostgreSQL or SQLite database. It also uses a Redis cache for improved performance, which is emptied during each deployment. It also makes a presistent volume for the database to keep the data between deployments. This is designed to be used for Dokploy.
 
 ## Usage
 Docker run command for `PostgreSQL`:
