@@ -70,6 +70,8 @@ services:
             CACHE_STORE:        "redis"
             REDIS:              "redis://cache:6379"
             WEBSOCKETS_ENABLED: "true"
+            CORS_ENABLED:       "${CORS_ENABLED}"
+            CORS_ORIGIN:        "${CORS_ORIGIN}"
             PUBLIC_URL:         "https://${DIRECTUS_DOMAIN}"
         volumes:
             - uploads:/directus/uploads
