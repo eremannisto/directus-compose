@@ -6,7 +6,7 @@ This is a docker-compose template for Directus with PostgreSQL as database. It a
 # Directus
 DIRECTUS_VERSION=10.13.1                # Directus version
 DIRECTUS_KEY=<RANDOM-KEY>               # Secret key for Directus
-DIRECTUS_MAX_UPLOAD_SIZE                # Max upload size for Directus
+DIRECTUS_MAX_UPLOAD_SIZE=5mb            # Max upload size for Directus
 ADMIN_EMAIL=<USER-EMAIL>                # Email for Directus
 ADMIN_PASSWORD=<USER-PASSWORD>          # Password for Directus
 
