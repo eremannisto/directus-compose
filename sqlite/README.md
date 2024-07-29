@@ -12,6 +12,8 @@ DIRECTUS_KEY=<RANDOM_KEY>           # Secret key for Directus
 DIRECTUS_HASH=<RANDOM_KEY>          # Hash for Directus
 DIRECTUS_DOMAIN=cms.example.com     # Domain for Directus
 DIRECTUS_PORT=8055                  # Port for Directus
+DIRECTUS_MAX_UPLOAD_SIZE=10mb       # Max upload size for Directus
+
 
 # CORS POLICY
 CORS_ENABLED=true                   # Enable CORS
